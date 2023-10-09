@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"net/netip"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -31,6 +32,8 @@ func main() {
 	Address := flag.String("listen-address", ":9230", "The Address used to listen the exporter")
 	InterfaceName := flag.String("interface", "eth0", "The interface name to send packets from")
 	flag.Parse()
+
+	fmt.Printf("[Info] Listening on %s", *Address)
 
 	http.HandleFunc("/probe", func(w http.ResponseWriter, r *http.Request) {
 		Query := r.URL.Query()
@@ -76,7 +79,7 @@ func main() {
 
 		if err != nil {
 			w.WriteHeader(500)
-			fmt.Fprintf(w, "The interface specified to send ARP requests does not exist (use ifconfig to find them)")
+			fmt.Fprintf(w, "[Error] %s", err.Error())
 			return
 		}
 
@@ -84,7 +87,7 @@ func main() {
 
 		if err != nil {
 			w.WriteHeader(500)
-			fmt.Fprintf(w, "The exporter does not have enough permissions to send ARP packets (CAP_NET_RAW required)")
+			fmt.Fprintf(w, "[Error] %s", err.Error())
 			return
 		}
 
@@ -105,5 +108,10 @@ func main() {
 		fmt.Fprint(w, GenerateMetrics(duration, Success))
 	})
 
-	http.ListenAndServe(*Address, nil)
+	err := http.ListenAndServe(*Address, nil)
+
+	if err != nil {
+		fmt.Printf("[Error] Could not listen on %s", *Address)
+		os.Exit(1)
+	}
 }
