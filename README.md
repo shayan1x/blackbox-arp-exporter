@@ -2,6 +2,13 @@
 The blackbox exporter allows blackbox probing of endpoints over
 ARP
 
+### Build:
+```
+git clone https://git.digikala.com/dkdevops/exporters/blackbox-arp-exporter.git
+cd PROJECT_DIR
+go build -o blackbox-arp-exporter
+./blackbox-arp-exporter -help
+```
 
 ### How to run?
 
