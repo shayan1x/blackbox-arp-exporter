@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   blackbox-arp-exporter:
-    build: shayanism/blackbox-arp-exporter
+    image: shayanism/blackbox-arp-exporter:0.9.0
     command: ["blackbox-arp-exporter", "-interface", "ens192", "-listen-address", ":9185"]
     network_mode: host
     cap_add: 
