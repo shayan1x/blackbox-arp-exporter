@@ -3,7 +3,7 @@ version: '3.8'
 services:
   blackbox-arp-exporter:
     build: .
-    command: ["blackbox-arp-exporter", "-interface", "wlo1", "-listen-address", ":9300"]
+    command: ["blackbox-arp-exporter", "-interface", "ens192", "-listen-address", ":9185"]
     network_mode: host
     cap_add: 
-      - ALL
+      - CAP_NET_RAW
